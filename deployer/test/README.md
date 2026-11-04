@@ -1,5 +1,11 @@
 See [the README in deployer/contracts](../contracts/README.md) for more info on deployment of the contracts.
 
+# Unit tests
+
+These need no other services (they use a local stub server):
+
+`docker-compose -f docker-compose.remote.pull.yml run --rm --no-deps deployer npm run test:unit`
+
 # To run a specific test:  
 
 _Note: in the steps below, you can replace `-f docker-compose.remote.pull.yml` with one of the other provided docker-compose files, such as `-f docker-compose.mongodb.yml`._  
