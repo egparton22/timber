@@ -6,7 +6,7 @@ The requirement to maintain independence is also the reason that we have waived 
 
 ## Branch policy
 
-The [master branch](https://github.com/EYBlockchain/timber/tree/master) is a supported version per our [security policy](https://github.com/EYBlockchain/timber/SECURITY.md). Please make all pull requests against this version, unless you have a specific reason to branch off of another branch.
+The [master branch](https://github.com/EYBlockchain/timber/tree/master) is a supported version per our [security policy](https://github.com/EYBlockchain/timber/blob/master/SECURITY.md). Please make all pull requests against this version, unless you have a specific reason to branch off of another branch.
 
 ## Commit policy
 
