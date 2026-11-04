@@ -2,7 +2,7 @@
   "presets": [
     ["@babel/preset-env", {
       "targets": {
-        "node": "11.15"
+        "node": "22"
       }
     }]
   ]
