@@ -1,4 +1,4 @@
-import request from 'request';
+import httpClient from './http-client';
 import config from 'config';
 import utilsPoll from '../utils-poll';
 
@@ -9,18 +9,13 @@ Start the event filter in the merkle-tree microservice, for the given contract
 */
 async function startEventFilter(contractName) {
   console.log(`\nCalling startEventFilter(${contractName})`);
-  return new Promise((resolve, reject) => {
-    const options = {
+  return httpClient
+    .request({
       url: `${url}/start`,
       method: 'POST',
-      json: true,
-      body: { contractName },
-    };
-    request(options, (err, res, body) => {
-      if (err) reject(err);
-      else resolve(body.data);
-    });
-  });
+      data: { contractName },
+    })
+    .then(res => res.data.data);
 }
 
 /**
@@ -28,18 +23,13 @@ Get the nodes on the sibling path from the given leafIndex to the root.
 */
 async function getSiblingPathByLeafIndex(contractName, leafIndex) {
   console.log(`\nCalling getSiblingPathByLeafIndex(${contractName}, ${leafIndex})`);
-  return new Promise((resolve, reject) => {
-    const options = {
+  return httpClient
+    .request({
       url: `${url}/siblingPath/${leafIndex}`,
       method: 'POST',
-      json: true,
-      body: { contractName },
-    };
-    request(options, (err, res, body) => {
-      if (err) reject(err);
-      else resolve(body.data);
-    });
-  });
+      data: { contractName },
+    })
+    .then(res => res.data.data);
 }
 
 /**
@@ -47,18 +37,13 @@ Gets the interface of a deployed MerkleTree.sol contract
 */
 async function getContractInterface(contractName) {
   console.log(`\nCalling getContractInterface(${contractName})`);
-  return new Promise((resolve, reject) => {
-    const options = {
+  return httpClient
+    .request({
       url: `${url}/metadata/contractInterface`,
       method: 'GET',
-      json: true,
-      body: { contractName },
-    };
-    request(options, (err, res, body) => {
-      if (err) reject(err);
-      else resolve(body.data);
-    });
-  });
+      data: { contractName },
+    })
+    .then(res => res.data.data);
 }
 
 /**
@@ -66,34 +51,24 @@ Gets the address of a deployed MerkleTree.sol contract
 */
 async function getContractAddress(contractName) {
   console.log(`\nCalling getContractAddress(${contractName})`);
-  return new Promise((resolve, reject) => {
-    const options = {
+  return httpClient
+    .request({
       url: `${url}/metadata/contractAddress`,
       method: 'GET',
-      json: true,
-      body: { contractName },
-    };
-    request(options, (err, res, body) => {
-      if (err) reject(err);
-      else resolve(body.data);
-    });
-  });
+      data: { contractName },
+    })
+    .then(res => res.data.data);
 }
 
 async function postInterface(contractName, contractInterface) {
   console.log(`\nCalling postContractInterface(${contractName})`);
-  return new Promise((resolve, reject) => {
-    const options = {
+  return httpClient
+    .request({
       url: `${url}/metadata/contractInterface`,
       method: 'POST',
-      json: true,
-      body: { contractName, contractInterface },
-    };
-    request(options, (err, res, body) => {
-      if (err) reject(err);
-      else resolve(body.data);
-    });
-  });
+      data: { contractName, contractInterface },
+    })
+    .then(res => res.data.data);
 }
 
 /**
@@ -129,18 +104,13 @@ async function postContractInterface(contractName, contractInterface) {
 
 async function postAddress(contractName, contractAddress) {
   console.log(`\nCalling postContractAddress(${contractName})`);
-  return new Promise((resolve, reject) => {
-    const options = {
+  return httpClient
+    .request({
       url: `${url}/metadata/contractAddress`,
       method: 'POST',
-      json: true,
-      body: { contractName, contractAddress },
-    };
-    request(options, (err, res, body) => {
-      if (err) reject(err);
-      else resolve(body.data);
-    });
-  });
+      data: { contractName, contractAddress },
+    })
+    .then(res => res.data.data);
 }
 
 /**
@@ -178,18 +148,13 @@ async function insertTreeHeight(contractName, treeHeight) {
   console.log('\nPosting a request to insert the treeHeight into the merkle-tree microservice...');
   try {
     console.log(`\nCalling insertTreeHeight(${contractName}, ${treeHeight})`);
-    return new Promise((resolve, reject) => {
-      const options = {
+    return httpClient
+      .request({
         url: `${url}/metadata/treeHeight`,
         method: 'POST',
-        json: true,
-        body: { contractName, treeHeight },
-      };
-      request(options, (err, res, body) => {
-        if (err) reject(err);
-        else resolve(body.data);
-      });
-    });
+        data: { contractName, treeHeight },
+      })
+      .then(res => res.data.data);
   } catch (err) {
     throw new Error(
       'Could not post a request to insert a treeHeight into the merkle-tree microservice',
@@ -201,18 +166,13 @@ async function insertLeaves(contractName, leaves) {
   // console.log('\nPosting a request to insert leaves into the merkle-tree microservice...');
   try {
     // console.log(`\nCalling insertLeaves(${contractName})`);
-    return new Promise((resolve, reject) => {
-      const options = {
+    return httpClient
+      .request({
         url: `${url}/leaves`,
         method: 'POST',
-        json: true,
-        body: { contractName, leaves },
-      };
-      request(options, (err, res, body) => {
-        if (err) reject(err);
-        else resolve(body.data);
-      });
-    });
+        data: { contractName, leaves },
+      })
+      .then(res => res.data.data);
   } catch (err) {
     throw new Error('Could not post a request to insert leaves into the merkle-tree microservice');
   }
@@ -220,18 +180,13 @@ async function insertLeaves(contractName, leaves) {
 
 async function update(contractName) {
   try {
-    return new Promise((resolve, reject) => {
-      const options = {
+    return httpClient
+      .request({
         url: `${url}/update`,
         method: 'PATCH',
-        json: true,
-        body: { contractName },
-      };
-      request(options, (err, res, body) => {
-        if (err) reject(err);
-        else resolve(body.data);
-      });
-    });
+        data: { contractName },
+      })
+      .then(res => res.data.data);
   } catch (err) {
     throw new Error('Could not post a request to insert leaves into the merkle-tree microservice');
   }
