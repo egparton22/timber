@@ -1,4 +1,4 @@
-import request from 'request';
+import httpClient from './http-client';
 import config from 'config';
 import Web3 from '../web3';
 
@@ -10,18 +10,11 @@ Gets an instance of a MerkleTree.sol contract interface from some external contr
 async function getContractInterface(contractName) {
   console.log(`\nCalling getContractInterface(${contractName})`);
   const url = `${config.deployer.host}:${config.deployer.port}`;
-  return new Promise((resolve, reject) => {
-    const options = {
-      url: `${url}/contract/interface`,
-      method: 'GET',
-      json: true,
-      body: { contractName },
-    };
-    request(options, (err, res, body) => {
-      if (err) reject(err);
-      else resolve(body);
-    });
-  });
+  return httpClient({
+    url: `${url}/contract/interface`,
+    method: 'GET',
+    data: { contractName },
+  }).then(res => res.data);
 }
 
 /**
@@ -31,18 +24,11 @@ async function getContractAddress(contractName) {
   console.log(`\nCalling getContractAddress(${contractName})`);
   const url = `${config.deployer.host}:${config.deployer.port}`;
   console.log('url:', url);
-  return new Promise((resolve, reject) => {
-    const options = {
-      url: `${url}/contract/address`,
-      method: 'GET',
-      json: true,
-      body: { contractName },
-    };
-    request(options, (err, res, body) => {
-      if (err) reject(err);
-      else resolve(body);
-    });
-  });
+  return httpClient({
+    url: `${url}/contract/address`,
+    method: 'GET',
+    data: { contractName },
+  }).then(res => res.data);
 }
 
 /**
