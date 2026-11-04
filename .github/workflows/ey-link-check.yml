@@ -1,0 +1,47 @@
+name: EY link check
+
+# Weekly check that links to EY (github.com/EYBlockchain and ey.com) in the docs still work.
+on:
+  schedule:
+    - cron: '23 13 * * 1' # Mondays 13:23 UTC
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '**.md'
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  ey-links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check EY links
+        id: lychee
+        uses: lycheeverse/lychee-action@v2.9.0
+        with:
+          args: >-
+            --no-progress
+            --root-dir ${{ github.workspace }}
+            --exclude-path node_modules
+            --exclude '.*'
+            --include 'github\.com/EYBlockchain'
+            --include '(^|[./])ey\.com'
+            './**/*.md'
+          output: ./lychee/out.md
+          fail: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Open an issue if a link is broken
+        if: steps.lychee.outputs.exit_code != 0 && github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh issue create --repo "${{ github.repository }}" --title "Broken EY links found by the weekly link check" --body-file ./lychee/out.md
+
+      - name: Fail if a link is broken
+        if: steps.lychee.outputs.exit_code != 0
+        run: exit 1
